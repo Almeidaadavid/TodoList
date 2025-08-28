@@ -47,12 +47,14 @@ VITE_API_URL=http://localhost:3000
 1. Clone o repositório:
 
    `git clone https://github.com/Almeidaadavid/TodoList.git`
+   
    `cd TodoList`
 
-2. Configurar e rodar o Backend:
+3. Configurar e rodar o Backend:
 
-   cd Back
+    ```cd Back```
 
+    ```
     ### Instalar dependências
     npm install
 
@@ -63,16 +65,19 @@ VITE_API_URL=http://localhost:3000
     ### Rodar em modo desenvolvimento
     npm run dev
     Servidor rodará em: http://localhost:3000
+    ```
 
-3. Configurar e rodar o Frontend:
+4. Configurar e rodar o Frontend:
 
-cd Front/todolist
+  ```cd Front/todolist```
 
+  ```
   ### Instalar dependências
     npm install
 
-  #### Rodar servidor de desenvolvimento
+  ### Rodar servidor de desenvolvimento
     npm run dev
+  ```
 
   Frontend rodará em: http://localhost:5173
 
