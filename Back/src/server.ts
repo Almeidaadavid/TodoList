@@ -4,7 +4,7 @@ import routes from './routes/index';
 import cors from "cors";
 
 const port = process.env.PORT || 3000;
-const route = process.env.ROUTE || 'http://localhost:5173/'
+const route = process.env.ROUTE || 'http://localhost:5173'
 
 AppDataSource.initialize().then(() => {
     const app = express();
