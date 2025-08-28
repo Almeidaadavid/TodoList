@@ -5,6 +5,7 @@ import  { type Status, type Todo, StatusValues } from '@/type/type';
 import { getTodos, create, getTodoById, updateTodo, deleteTodo, updateStatusTodo } from '@/api/todos';
 import Modal from '@/components/ui/Modal.vue'
 import { showToast } from '@/lib/utils';
+import TodoItem from '@/components/TodoItem.vue';
 
 const props = withDefaults(defineProps<{ filter?: undefined | 'OPEN' | 'DONE' | 'IN_PROGRESS' }>(), {
   filter: undefined,
@@ -64,7 +65,14 @@ const openModal = () => {
   todoDescription.value = '';
   selected.value = '';
   todoDetailName.value = '';
+}
 
+const closeModal = () => {
+  todoDescription.value = '';
+  selected.value = '';
+  todoDetailName.value = '';
+  isEditTodo.value = false;
+  isDeleteTodo.value = false;
 }
 
 const createTodo = async() => {
@@ -236,9 +244,9 @@ const completedCount = computed(() => todos.value.filter((t) => validStatus(t.st
         </div>
       </div>
     </div>
-    <Modal v-model="showModal">
+    <Modal v-model="showModal" @closed="closeModal">
       <div v-if="!isDeleteTodo">
-        <h2 class="text-xl font-bold mb-4">Adicionar Tarefa</h2>
+        <h2 class="text-xl font-bold mb-4"> {{ isEditTodo ? 'Editar Tarefa' : 'Adicionar Tarefa' }} </h2>
         <div>
           <span>Nome</span>
           <input
@@ -330,28 +338,15 @@ const completedCount = computed(() => todos.value.filter((t) => validStatus(t.st
           </p>
         </div>
       </div>
-
-      <div
-        v-else
+      <TodoItem 
         v-for="todo in filteredTodos"
         :key="todo.id"
-        class="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow"
-      >
-        <div class="p-4">
-          <div class="flex items-center gap-3">
-            <input type="checkbox" @change="updateStatus(todo.id!.toString(), todo.status)" :checked="validStatus(todo.status)" class="h-4 w-4" />
-            <span :class="validStatus(todo.status) ? 'line-through text-gray-500 flex-1' : 'text-gray-900 flex-1'">
-              {{ todo.name }}
-            </span>
-            <button @click="toggleEditTodo(todo.id!.toString())" class="px-2 py-1 rounded-md text-red-600 hover:bg-red-50" title="Edit">
-              <Pen class="h-4 w-4" />
-            </button>
-            <button @click="toggleDeleteTodo(todo.id!.toString(), todo.name)" class="px-2 py-1 rounded-md text-red-600 hover:bg-red-50" title="Delete">
-              <Trash2 class="h-4 w-4" />
-            </button>
-          </div>
-        </div>
-      </div>
+        :todo="todo"
+        :valid-status="validStatus"
+        @edit="toggleEditTodo"
+        @delete="toggleDeleteTodo"
+        @update-status="updateStatus"
+      />
     </div>
   </div>
 </template>
