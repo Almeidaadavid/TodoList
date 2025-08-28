@@ -1,14 +1,6 @@
 import api from './axios'
-import type { Status } from '@/type/type'
+import type { Todo } from '@/type/type'
 import { API_ENDPOINTS } from './endpoints';
-
-
-export interface Todo {
-    id?: number,
-    name: string,
-    description: string,
-    status: Status
-}
 
 export const getTodos = async (filter?: string) => {
     const { data } = await api.get<Todo[]>("/task", {
