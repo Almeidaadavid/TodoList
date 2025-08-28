@@ -10,8 +10,19 @@ export class TaskRepository {
         return this.repository.save(task);
     }
 
-    async findAll() {
-        return this.repository.find();
+    async findAll(status?: string) {
+
+      const where: any = {};
+
+      if (status) {
+        where.status = status;
+      }
+        return this.repository.find({
+          where: where,
+          order: {
+            id: 'asc'
+          }
+        });
     }
 
     async findById(id: number) {

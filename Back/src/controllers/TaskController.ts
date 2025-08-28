@@ -8,8 +8,8 @@ export class TaskController {
     constructor(taskService : TaskService) {
         this.taskService = taskService;
     }
-     create = async(req: Request, res: Response) => {
-         
+    
+    create = async(req: Request, res: Response) => {
          try {
             const {name, description, status} = req.body;
             const task = await this.taskService.createTask(name, description, status)
@@ -20,9 +20,10 @@ export class TaskController {
         }
     }
 
-     getAll = async(req: Request, res: Response) => {
+    getAll = async(req: Request, res: Response) => {
         try {
-            const tasks = await this.taskService.findAll();
+            const status = req.query.status as string | undefined;
+            const tasks = await this.taskService.findAll(status);
             return res.json(tasks);
         } catch(error) {
             console.log(error);
@@ -30,10 +31,32 @@ export class TaskController {
         }
     }
 
+    getById = async(req: Request, res: Response) => {
+        try {
+            const id = Number(req.params.id);
+            const task = await this.taskService.findById(id);
+            return res.json(task);
+        } catch (error) {
+
+        }
+    }
+
     update = async (req: Request, res: Response) => {
         try {
             const id = Number(req.params.id);
             const updated = await this.taskService.updateTask(id, req.body);
+            const { id: _id, ...TaskWithoutId} = updated;
+            return res.json(TaskWithoutId);
+        } catch (error: any) {
+            return res.status(400).json({ message: error.message });
+        }
+    }
+
+    updateStatus = async(req: Request, res:Response) => {
+        try {
+            const id = Number(req.params.id);
+            const { status } = req.body;
+            const updated = await this.taskService.updateStatus(id, status);
             const { id: _id, ...TaskWithoutId} = updated;
             return res.json(TaskWithoutId);
         } catch (error: any) {

@@ -18,14 +18,25 @@ export class TaskService {
         return this.taskRepository.create({ name, description, status: status as Status });
     }
 
-    async findAll() {
-        return this.taskRepository.findAll();
+    async findAll(status?: string) {
+        return this.taskRepository.findAll(status);
+    }
+
+    async findById(id: number) {
+        return this.taskRepository.findById(id);
     }
 
     async updateTask(id: number, data: Partial<{name: string, description: string, status: string}>) {
         const task = await this.taskRepository.findById(id);
         if (!task) throw new Error(ErrorMessages.TASK_NOT_FOUND);
         Object.assign(task, data);
+        return this.taskRepository.update(task);
+    }
+
+    async updateStatus(id: number, status: string) {
+        const task = await this.taskRepository.findById(id);
+        if (!task) throw new Error(ErrorMessages.TASK_NOT_FOUND);
+        task.status = status as Status;
         return this.taskRepository.update(task);
     }
 
